@@ -1,0 +1,344 @@
+{
+  "info": {
+    "name": "FacturApp HU2001-HU2007",
+    "description": "Requests for the product, client and invoice stories. Log in as ADMIN or SELLER before using protected requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@facturapp.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/login"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "if (body.access_token) pm.collectionVariables.set('token', body.access_token);"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Create product (price zero)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Bolsa ecológica\",\n  \"description\": \"Bolsa reutilizable\",\n  \"price\": 0,\n  \"stock\": 100,\n  \"category_id\": {{categoryId}}\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/products"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "if (body.id) pm.collectionVariables.set('productId', body.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Descripción actualizada\",\n  \"price\": 12000,\n  \"stock\": 25\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/products/{{productId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Clients",
+      "item": [
+        {
+          "name": "List clients",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/clients?page=1&per_page=3"
+          }
+        },
+        {
+          "name": "Create client",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"document_type\": \"CC\",\n  \"document_number\": \"1032456789\",\n  \"name\": \"Laura Gómez\",\n  \"email\": \"laura.gomez@example.com\",\n  \"phone\": \"3104567890\",\n  \"address\": \"Calle 45 # 12-30, Bogotá\"\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/clients"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "if (body.id) pm.collectionVariables.set('clientId', body.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update client",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"3209876543\",\n  \"address\": \"Carrera 7 # 80-15, Bogotá\"\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/clients/{{clientId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Invoices",
+      "item": [
+        {
+          "name": "Create invoice",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_id\": {{clientId}},\n  \"user_id\": {{sellerId}}\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/invoices"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "if (body.id) pm.collectionVariables.set('invoiceId', body.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List invoices",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/invoices?page=1&per_page=3"
+          }
+        },
+        {
+          "name": "Update invoice",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_id\": {{clientId}}\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/invoices/{{invoiceId}}"
+          }
+        },
+        {
+          "name": "Complete invoice",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/invoices/{{invoiceId}}/complete"
+          }
+        },
+        {
+          "name": "Cancel invoice",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/invoices/{{invoiceId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Invoice details",
+      "item": [
+        {
+          "name": "Add product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": {{productId}},\n  \"quantity\": 2\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/invoices/{{invoiceId}}/details"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "if (body.id) pm.collectionVariables.set('detailId', body.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List invoice details",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/invoices/{{invoiceId}}/details"
+          }
+        },
+        {
+          "name": "Change product quantity",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 1\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/invoices/{{invoiceId}}/details/{{detailId}}"
+          }
+        },
+        {
+          "name": "Remove product",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/invoices/{{invoiceId}}/details/{{detailId}}"
+          }
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:5000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "clientId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "categoryId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "sellerId",
+      "value": "2",
+      "type": "string"
+    },
+    {
+      "key": "invoiceId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "productId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "detailId",
+      "value": "1",
+      "type": "string"
+    }
+  ]
+}

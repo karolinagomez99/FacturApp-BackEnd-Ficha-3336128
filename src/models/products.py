@@ -42,6 +42,10 @@ class Products(Base):
     def get_by_name(cls, name):
         return db.session.scalar(select(cls).where(cls.name == name))
 
+    @classmethod
+    def get_by_category(cls, category_id):
+        return db.session.scalar(select(cls).where(cls.category_id == category_id).limit(1))
+
     @staticmethod
     def save(product):
         db.session.add(product)

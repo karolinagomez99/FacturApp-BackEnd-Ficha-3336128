@@ -24,6 +24,14 @@ class Categories(Base):
     def get_by_name(cls, name):
         return db.session.scalar(select(cls).where(cls.name == name))
 
+    @classmethod
+    def get_paginated(cls, page=1, per_page=3):
+        categories = db.session.scalars(
+            select(cls).order_by(cls.id).offset((page - 1) * per_page).limit(per_page)
+        ).all()
+        total = db.session.query(cls).count()
+        return categories, total
+
     @staticmethod
     def save(category):
         db.session.add(category)
@@ -32,4 +40,9 @@ class Categories(Base):
     @staticmethod
     def update(category):
         db.session.add(category)
+        db.session.commit()
+
+    @staticmethod
+    def delete(category):
+        db.session.delete(category)
         db.session.commit()

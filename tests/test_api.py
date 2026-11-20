@@ -1,6 +1,8 @@
 import os
 import unittest
 
+import jwt
+
 os.environ['DATABASE_URL'] = 'sqlite://'
 os.environ['JWT_SECRET_KEY'] = 'tests-use-a-long-random-key-for-hmac-sha256'
 
@@ -225,6 +227,57 @@ class ApiTests(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json['role'], Role.SELLER.value)
+
+    def test_inactive_user_cannot_login_or_use_malformed_signed_token(self):
+        with app.app_context():
+            self.admin.active = 0
+            Users.update(self.admin)
+
+        response = self.http.post('/api/v1/login', json={
+            'email': 'admin@test.local',
+            'password': 'pass123',
+        })
+        self.assertEqual(response.status_code, 403)
+
+        malformed_token = jwt.encode(
+            {'exp': 9999999999},
+            app.config['JWT_SECRET_KEY'],
+            algorithm='HS256',
+        )
+        response = self.http.get(
+            '/api/v1/clients',
+            headers={'Authorization': f'Bearer {malformed_token}'},
+        )
+        self.assertEqual(response.status_code, 401)
+
+    def test_category_crud(self):
+        response = self.http.post(
+            '/api/v1/categories',
+            headers=self.admin_headers,
+            json={'name': 'Technology', 'description': 'Ignored by model'},
+        )
+        self.assertEqual(response.status_code, 201)
+        category_id = response.json['id']
+
+        response = self.http.get(
+            f'/api/v1/categories/{category_id}',
+            headers=self.seller_headers,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json['name'], 'Technology')
+
+        response = self.http.put(
+            f'/api/v1/categories/{category_id}',
+            headers=self.admin_headers,
+            json={'name': 'Computers'},
+        )
+        self.assertEqual(response.status_code, 200)
+
+        response = self.http.delete(
+            f'/api/v1/categories/{category_id}',
+            headers=self.admin_headers,
+        )
+        self.assertEqual(response.status_code, 200)
 
 
 if __name__ == '__main__':

@@ -59,7 +59,13 @@ def token_required(f):
         except jwt.InvalidTokenError:
             return jsonify({'success': False, 'message': 'Invalid token!'}), 401
 
-        current_user = Users.get_by_id(payload['user_id'])
+        if not isinstance(payload, dict):
+            return jsonify({'success': False, 'message': 'Invalid token!'}), 401
+        user_id = payload.get('user_id')
+        if not isinstance(user_id, int) or isinstance(user_id, bool) or user_id <= 0:
+            return jsonify({'success': False, 'message': 'Invalid token!'}), 401
+
+        current_user = Users.get_by_id(user_id)
         if not current_user:
             return jsonify({'success': False, 'message': 'User not found!'}), 401
         # NCFC: a user deactivated after logging in cannot keep using his token

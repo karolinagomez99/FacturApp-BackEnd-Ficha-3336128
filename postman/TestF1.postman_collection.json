@@ -103,6 +103,200 @@
             ]
         },
         {
+            "name": "Users",
+            "description": "NCFC: user management (only ADMIN).",
+            "item": [
+                {
+                    "name": "Assign Role",
+                    "request": {
+                        "url": {
+                            "raw": "http://127.0.0.1:5000/api/v1/users/2/role",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "api",
+                                "v1",
+                                "users",
+                                "2",
+                                "role"
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [],
+                        "description": "NCFC: only ADMIN. Allowed roles: ADMIN, SELLER. Log in as ADMIN first.",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"role\": \"SELLER\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": [],
+                    "protocolProfileBehavior": {}
+                }
+            ]
+        },
+        {
+            "name": "Categories",
+            "item": [
+                {
+                    "name": "Create New Category",
+                    "request": {
+                        "url": {
+                            "raw": "http://127.0.0.1:5000/api/v1/categories",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "api",
+                                "v1",
+                                "categories"
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"name\": \"Tecnología\",\r\n    \"description\": \"Equipos y accesorios de cómputo\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": [],
+                    "protocolProfileBehavior": {}
+                },
+                {
+                    "name": "Get All Categories",
+                    "request": {
+                        "url": {
+                            "raw": "http://127.0.0.1:5000/api/v1/categories",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "api",
+                                "v1",
+                                "categories"
+                            ]
+                        },
+                        "method": "GET",
+                        "header": []
+                    },
+                    "response": [],
+                    "protocolProfileBehavior": {}
+                },
+                {
+                    "name": "Get Category By Id",
+                    "request": {
+                        "url": {
+                            "raw": "http://127.0.0.1:5000/api/v1/categories/1",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "api",
+                                "v1",
+                                "categories",
+                                "1"
+                            ]
+                        },
+                        "method": "GET",
+                        "header": []
+                    },
+                    "response": [],
+                    "protocolProfileBehavior": {}
+                },
+                {
+                    "name": "Update Full Category",
+                    "request": {
+                        "url": {
+                            "raw": "http://127.0.0.1:5000/api/v1/categories/1",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "api",
+                                "v1",
+                                "categories",
+                                "1"
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"name\": \"Tecnología\",\r\n    \"description\": \"Equipos y accesorios de cómputo\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": [],
+                    "protocolProfileBehavior": {}
+                },
+                {
+                    "name": "Delete Category",
+                    "request": {
+                        "url": {
+                            "raw": "http://127.0.0.1:5000/api/v1/categories/1",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "api",
+                                "v1",
+                                "categories",
+                                "1"
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": []
+                    },
+                    "response": [],
+                    "protocolProfileBehavior": {}
+                }
+            ]
+        },
+        {
             "name": "Products",
             "event": [
                 {
@@ -338,14 +532,13 @@
             ]
         },
         {
-            "name": "Users",
-            "description": "NCFC: user management (only ADMIN).",
+            "name": "Clients",
             "item": [
                 {
-                    "name": "Assign Role",
+                    "name": "Create New Client",
                     "request": {
                         "url": {
-                            "raw": "http://127.0.0.1:5000/api/v1/users/2/role",
+                            "raw": "http://127.0.0.1:5000/api/v1/clients",
                             "protocol": "http",
                             "host": [
                                 "127",
@@ -357,23 +550,222 @@
                             "path": [
                                 "api",
                                 "v1",
-                                "users",
-                                "2",
-                                "role"
+                                "clients"
                             ]
                         },
-                        "method": "PUT",
+                        "method": "POST",
                         "header": [],
-                        "description": "NCFC: only ADMIN. Allowed roles: ADMIN, SELLER. Log in as ADMIN first.",
                         "body": {
                             "mode": "raw",
-                            "raw": "{\r\n    \"role\": \"SELLER\"\r\n}",
+                            "raw": "{\r\n    \"name\": \"María Fernanda López\",\r\n    \"email\": \"maria.lopez@correo.com\",\r\n    \"phone\": \"3001234567\",\r\n    \"address\": \"Calle 15 # 12-30, Armenia, Quindío\"\r\n}",
                             "options": {
                                 "raw": {
                                     "language": "json"
                                 }
                             }
                         }
+                    },
+                    "response": [],
+                    "protocolProfileBehavior": {}
+                },
+                {
+                    "name": "Get All Clients",
+                    "request": {
+                        "url": {
+                            "raw": "http://127.0.0.1:5000/api/v1/clients",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "api",
+                                "v1",
+                                "clients"
+                            ]
+                        },
+                        "method": "GET",
+                        "header": []
+                    },
+                    "response": [],
+                    "protocolProfileBehavior": {}
+                },
+                {
+                    "name": "Get Client By Id",
+                    "request": {
+                        "url": {
+                            "raw": "http://127.0.0.1:5000/api/v1/clients/1",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "api",
+                                "v1",
+                                "clients",
+                                "1"
+                            ]
+                        },
+                        "method": "GET",
+                        "header": []
+                    },
+                    "response": [],
+                    "protocolProfileBehavior": {}
+                },
+                {
+                    "name": "Update Full Client",
+                    "request": {
+                        "url": {
+                            "raw": "http://127.0.0.1:5000/api/v1/clients/1",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "api",
+                                "v1",
+                                "clients",
+                                "1"
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"name\": \"María Fernanda López\",\r\n    \"email\": \"maria.lopez@correo.com\",\r\n    \"phone\": \"3001234567\",\r\n    \"address\": \"Calle 15 # 12-30, Armenia, Quindío\"\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": [],
+                    "protocolProfileBehavior": {}
+                },
+                {
+                    "name": "Delete Client",
+                    "request": {
+                        "url": {
+                            "raw": "http://127.0.0.1:5000/api/v1/clients/1",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "api",
+                                "v1",
+                                "clients",
+                                "1"
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": []
+                    },
+                    "response": [],
+                    "protocolProfileBehavior": {}
+                }
+            ]
+        },
+        {
+            "name": "Invoices",
+            "item": [
+                {
+                    "name": "Create New Invoice",
+                    "request": {
+                        "url": {
+                            "raw": "http://127.0.0.1:5000/api/v1/invoices",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "api",
+                                "v1",
+                                "invoices"
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"client_id\": 1,\r\n    \"items\": [\r\n        {\r\n            \"product_id\": 6,\r\n            \"quantity\": 2\r\n        },\r\n        {\r\n            \"product_id\": 9,\r\n            \"quantity\": 1\r\n        }\r\n    ]\r\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": [],
+                    "protocolProfileBehavior": {}
+                },
+                {
+                    "name": "Get All Invoices",
+                    "request": {
+                        "url": {
+                            "raw": "http://127.0.0.1:5000/api/v1/invoices",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "api",
+                                "v1",
+                                "invoices"
+                            ]
+                        },
+                        "method": "GET",
+                        "header": []
+                    },
+                    "response": [],
+                    "protocolProfileBehavior": {}
+                },
+                {
+                    "name": "Get Invoice By Id",
+                    "request": {
+                        "url": {
+                            "raw": "http://127.0.0.1:5000/api/v1/invoices/1",
+                            "protocol": "http",
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "port": "5000",
+                            "path": [
+                                "api",
+                                "v1",
+                                "invoices",
+                                "1"
+                            ]
+                        },
+                        "method": "GET",
+                        "header": []
                     },
                     "response": [],
                     "protocolProfileBehavior": {}

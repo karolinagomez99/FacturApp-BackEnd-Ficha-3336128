@@ -1,5 +1,7 @@
 from flask import Blueprint, g, jsonify, request
+from sqlalchemy import select
 
+from src.models import db
 from src.models.clients import Clients
 from src.models.invoice_details import InvoiceDetails
 from src.models.invoices import Invoices
@@ -204,7 +206,9 @@ def cancel_invoice(invoice_id):
         return _conflict('Invoice is already cancelled')
 
     for detail in InvoiceDetails.get_by_invoice(invoice_id):
-        product = Products.get_by_id(detail.product_id)
+        product = db.session.scalars(
+            select(Products).where(Products.id == detail.product_id).with_for_update()
+        ).one()
         product.stock += detail.quantity
     invoice.active = 0
     Invoices.update(invoice)

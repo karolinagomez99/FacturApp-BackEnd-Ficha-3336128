@@ -1,7 +1,9 @@
 import math
 
 from flask import Blueprint, jsonify, request
+from sqlalchemy import select
 
+from src.models import db
 from src.models.invoice_details import InvoiceDetails
 from src.models.invoices import Invoices
 from src.models.products import Products
@@ -116,6 +118,14 @@ def post_invoice_detail(invoice_id):
     if errors:
         return _validation_error(errors)
 
+    product = db.session.scalars(
+        select(Products).where(Products.id == product.id).with_for_update()
+    ).one()
+    if quantity > product.stock:
+        return _validation_error({
+            'quantity': f'not enough stock, available: {product.stock}',
+        })
+
     detail = InvoiceDetails.get_by_invoice_and_product(invoice_id, product.id)
     created = detail is None
     if created:
@@ -131,11 +141,12 @@ def post_invoice_detail(invoice_id):
     product.stock -= quantity
     invoice.total = round(invoice.total + quantity * detail.unit_price, 2)
     if created:
-        InvoiceDetails.save(detail)
+        db.session.add(detail)
         status = 201
     else:
-        InvoiceDetails.update(detail)
+        db.session.add(detail)
         status = 200
+    db.session.commit()
     return jsonify(_detail_json(detail)), status
 
 
@@ -193,7 +204,9 @@ def put_invoice_detail(invoice_id, detail_id):
         elif quantity <= 0:
             errors['quantity'] = 'quantity must be greater than 0'
 
-    product = Products.get_by_id(detail.product_id)
+    product = db.session.scalars(
+        select(Products).where(Products.id == detail.product_id).with_for_update()
+    ).one()
     difference = quantity - detail.quantity if quantity is not None else 0
     if quantity is not None and quantity > detail.quantity:
         if difference > product.stock:
@@ -204,7 +217,7 @@ def put_invoice_detail(invoice_id, detail_id):
     product.stock -= difference
     invoice.total = round(invoice.total + difference * detail.unit_price, 2)
     detail.quantity = quantity
-    InvoiceDetails.update(detail)
+    db.session.commit()
     return jsonify(_detail_json(detail)), 200
 
 
@@ -234,10 +247,13 @@ def delete_invoice_detail(invoice_id, detail_id):
             'message': 'Invoice is completed and cannot be modified',
         }), 409
 
-    product = Products.get_by_id(detail.product_id)
+    product = db.session.scalars(
+        select(Products).where(Products.id == detail.product_id).with_for_update()
+    ).one()
     product.stock += detail.quantity
     invoice.total = round(invoice.total - detail.quantity * detail.unit_price, 2)
-    InvoiceDetails.delete(detail)
+    db.session.delete(detail)
+    db.session.commit()
     return jsonify({
         'success': True,
         'message': 'Invoice detail deleted',

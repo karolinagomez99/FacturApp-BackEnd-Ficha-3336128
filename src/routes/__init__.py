@@ -5,6 +5,7 @@ from src.routes.v1.users_routes import users_bp  # NCFC: users routes (assign ro
 from src.routes.v1.clients_routes import clients_bp
 from src.routes.v1.invoices_routes import invoices_bp
 from src.routes.v1.invoice_details_routes import invoice_details_bp
+from src.routes.v1.categories_routes import categories_bp
 
 
 def register_routes(app):  # Register the routes with the Flask app
@@ -14,3 +15,4 @@ def register_routes(app):  # Register the routes with the Flask app
     app.register_blueprint(clients_bp)
     app.register_blueprint(invoices_bp)
     app.register_blueprint(invoice_details_bp)
+    app.register_blueprint(categories_bp)

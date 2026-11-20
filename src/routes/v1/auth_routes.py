@@ -43,6 +43,8 @@ def login():
     user = Users.get_by_email(email)
     if not user or not user.check_password(password):
         return jsonify({'success': False, 'message': 'Invalid email or password'}), 401
+    if user.active != 1:
+        return jsonify({'success': False, 'message': 'User is inactive'}), 403
     
     return jsonify({
         'access_token': generate_token(user),
